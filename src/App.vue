@@ -1,9 +1,18 @@
 <template>
   <div>
     <h1>Weather & Travel Dashboard</h1>
-    <input v-model="city" @keyup.enter="searchCity" />
+    
+    <!-- поле вводу -->
+    <input 
+      v-model="city" 
+      @keyup.enter="searchCity" 
+      placeholder="Enter the city..." 
+    />
+
+    <!-- кнопка -->
     <button @click="searchCity">Search</button>
 
+    <!-- картка погоди зʼявляється тільки якщо місто вибране -->
     <WeatherCard v-if="selectedCity" :city="selectedCity" lang="en" />
   </div>
 </template>
@@ -12,10 +21,16 @@
 import { ref } from "vue";
 import WeatherCard from "./components/WeatherCard.vue";
 
-const city = ref("Lisbon");
-const selectedCity = ref("Lisbon");
+// поле для вводу
+const city = ref("");
 
+// вибране місто для пошуку
+const selectedCity = ref("");
+
+// функція пошуку
 function searchCity() {
-  selectedCity.value = city.value;
+  if (city.value.trim()) {
+    selectedCity.value = city.value;
+  }
 }
 </script>
