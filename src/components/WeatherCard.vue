@@ -1,5 +1,24 @@
 <template>
-    <div class="w-full max-w-4xl mx-auto">
+    <div class="w-full max-w-4xl mx-auto space-y-6">
+        <!-- Header + Search -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <h1 class="text-2xl font-bold text-gray-900">Weather Dashboard</h1>
+                <form @submit.prevent="searchCity" class="flex items-center w-full md:w-auto gap-3">
+                    <input
+                        v-model="city"
+                        placeholder="Enter the city..."
+                        class="w-full md:w-64 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                    <button
+                        type="submit"
+                        class="bg-blue-500 hover:bg-blue-600 text-white rounded-xl px-4 py-2 transition-colors"
+                    >
+                        Search
+                    </button>
+                </form>
+            </div>
+        </div>
         <!-- Loading State -->
         <div v-if="loading" class="bg-white rounded-2xl shadow-lg p-8 text-center">
             <div class="animate-pulse">
@@ -7,7 +26,7 @@
                 <div class="h-4 bg-blue-200 rounded w-32 mx-auto mb-2"></div>
                 <div class="h-4 bg-blue-200 rounded w-24 mx-auto"></div>
             </div>
-            <p class="text-blue-600 font-medium mt-4">Завантаження…</p>
+            <p class="text-blue-600 font-medium mt-4">Loading…</p>
         </div>
 
         <!-- Error State -->
@@ -32,7 +51,7 @@
                     />
                 </svg>
             </div>
-            <h3 class="text-red-800 font-semibold mb-2">Помилка</h3>
+            <h3 class="text-red-800 font-semibold mb-2">Error</h3>
             <p class="text-red-600">{{ error }}</p>
         </div>
 
@@ -72,7 +91,7 @@
                                 {{ Math.round(weatherData.main.temp) }}°
                             </div>
                             <div class="text-blue-100 text-sm">
-                                Відчувається {{ Math.round(weatherData.main.feels_like) }}°
+                                Feels like {{ Math.round(weatherData.main.feels_like) }}°
                             </div>
                         </div>
                     </div>
@@ -80,13 +99,13 @@
                     <!-- Weather Details -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                         <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                            <div class="text-blue-100 text-sm mb-1">Вологість</div>
+                            <div class="text-blue-100 text-sm mb-1">Humidity</div>
                             <div class="text-xl font-semibold">
                                 {{ weatherData.main.humidity }}%
                             </div>
                         </div>
                         <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                            <div class="text-blue-100 text-sm mb-1">Тиск</div>
+                            <div class="text-blue-100 text-sm mb-1">Pressure</div>
                             <div class="text-xl font-semibold">
                                 {{ weatherData.main.pressure }} hPa
                             </div>
@@ -95,18 +114,18 @@
                             class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center"
                             v-if="weatherData.wind"
                         >
-                            <div class="text-blue-100 text-sm mb-1">Вітер</div>
+                            <div class="text-blue-100 text-sm mb-1">Wind</div>
                             <div class="text-xl font-semibold">
-                                {{ Math.round(weatherData.wind.speed) }} м/с
+                                {{ Math.round(weatherData.wind.speed) }} m/s
                             </div>
                         </div>
                         <div
                             class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center"
                             v-if="weatherData.visibility"
                         >
-                            <div class="text-blue-100 text-sm mb-1">Видимість</div>
+                            <div class="text-blue-100 text-sm mb-1">Visibility</div>
                             <div class="text-xl font-semibold">
-                                {{ Math.round(weatherData.visibility / 1000) }} км
+                                {{ Math.round(weatherData.visibility / 1000) }} km
                             </div>
                         </div>
                     </div>
@@ -129,7 +148,7 @@
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                         />
                     </svg>
-                    5-денний прогноз
+                    5-day forecast
                 </h3>
 
                 <div class="grid gap-3 overflow-x-auto">
@@ -211,7 +230,7 @@
                         <!-- Temperature Chart -->
                         <div class="bg-gray-50 rounded-xl p-6">
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                Температурний графік
+                                Temperature chart
                             </h3>
                             <div class="h-64">
                                 <Line v-if="chartData" :data="chartData" :options="chartOptions" />
@@ -221,7 +240,7 @@
                         <!-- Hourly Forecast -->
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                                Погодинний прогноз
+                                Hourly forecast
                             </h3>
                             <div class="grid gap-3">
                                 <div
@@ -236,7 +255,7 @@
                                             >
                                                 {{
                                                     new Date(hourly.dt_txt).toLocaleTimeString(
-                                                        'uk-UA',
+                                                        'en-US',
                                                         {
                                                             hour: '2-digit',
                                                             minute: '2-digit',
@@ -257,7 +276,7 @@
                                                         {{ hourly.weather[0].description }}
                                                     </div>
                                                     <div class="text-sm text-gray-500">
-                                                        Вологість: {{ hourly.main.humidity }}%
+                                                        Humidity: {{ hourly.main.humidity }}%
                                                     </div>
                                                 </div>
                                             </div>
@@ -268,7 +287,7 @@
                                                     {{ Math.round(hourly.main.temp) }}°
                                                 </div>
                                                 <div class="text-sm text-gray-500">
-                                                    відчув.
+                                                    feels like
                                                     {{ Math.round(hourly.main.feels_like) }}°
                                                 </div>
                                             </div>
@@ -278,15 +297,15 @@
                                                     class="bg-white rounded-lg p-2 min-w-[60px]"
                                                 >
                                                     <div class="text-xs text-gray-500 mb-1">
-                                                        Вітер
+                                                        Wind
                                                     </div>
                                                     <div class="text-sm font-semibold">
-                                                        {{ Math.round(hourly.wind.speed) }} м/с
+                                                        {{ Math.round(hourly.wind.speed) }} m/s
                                                     </div>
                                                 </div>
                                                 <div class="bg-white rounded-lg p-2 min-w-[60px]">
                                                     <div class="text-xs text-gray-500 mb-1">
-                                                        Тиск
+                                                        Pressure
                                                     </div>
                                                     <div class="text-sm font-semibold">
                                                         {{ hourly.main.pressure }}
@@ -297,7 +316,7 @@
                                                     class="bg-white rounded-lg p-2 min-w-[60px]"
                                                 >
                                                     <div class="text-xs text-gray-500 mb-1">
-                                                        Дощ
+                                                        Rain
                                                     </div>
                                                     <div class="text-sm font-semibold">
                                                         {{ Math.round(hourly.pop * 100) }}%
@@ -308,10 +327,10 @@
                                                     class="bg-white rounded-lg p-2 min-w-[60px]"
                                                 >
                                                     <div class="text-xs text-gray-500 mb-1">
-                                                        Видим.
+                                                        Visibility
                                                     </div>
                                                     <div class="text-sm font-semibold">
-                                                        {{ Math.round(hourly.visibility / 1000) }}км
+                                                        {{ Math.round(hourly.visibility / 1000) }}km
                                                     </div>
                                                 </div>
                                             </div>
@@ -324,11 +343,21 @@
                 </div>
             </div>
         </div>
+
+        <!-- Initial Preloader / Empty State -->
+        <div v-else class="bg-white rounded-2xl shadow-lg p-10 text-center">
+            <div class="animate-pulse">
+                <div class="w-20 h-20 bg-blue-100 rounded-full mx-auto mb-6"></div>
+                <div class="h-4 bg-blue-100 rounded w-48 mx-auto mb-3"></div>
+                <div class="h-4 bg-blue-100 rounded w-32 mx-auto"></div>
+            </div>
+            <p class="text-gray-500 mt-6">Enter a city above to see the weather</p>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, computed } from 'vue'
 import axios from 'axios'
 import { Line } from 'vue-chartjs'
 import {
@@ -355,11 +384,6 @@ ChartJS.register(
     Filler,
 )
 
-const props = defineProps({
-    city: String,
-    lang: String,
-})
-
 const cityData = ref(null)
 const weatherData = ref(null)
 const forecastData = ref(null)
@@ -367,6 +391,7 @@ const loading = ref(false)
 const error = ref(null)
 const selectedDay = ref(null)
 const showDetailModal = ref(false)
+const city = ref('')
 
 const apiKey = import.meta.env.VITE_OPENWEATHER_KEY
 
@@ -384,7 +409,7 @@ const chartData = computed(() => {
     if (!selectedDayHourlyData.value.length) return null
 
     const hours = selectedDayHourlyData.value.map((item) =>
-        new Date(item.dt_txt).toLocaleTimeString('uk-UA', {
+        new Date(item.dt_txt).toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
         }),
@@ -397,7 +422,7 @@ const chartData = computed(() => {
         labels: hours,
         datasets: [
             {
-                label: 'Температура',
+                label: 'Temperature',
                 data: temps,
                 borderColor: 'rgb(59, 130, 246)',
                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -410,7 +435,7 @@ const chartData = computed(() => {
                 pointRadius: 4,
             },
             {
-                label: 'Відчувається',
+                label: 'Feels like',
                 data: feelsLike,
                 borderColor: 'rgb(168, 85, 247)',
                 backgroundColor: 'rgba(168, 85, 247, 0.1)',
@@ -510,11 +535,11 @@ function formatDate(dateStr) {
     tomorrow.setDate(today.getDate() + 1)
 
     if (date.toDateString() === today.toDateString()) {
-        return 'Сьогодні'
+        return 'Today'
     } else if (date.toDateString() === tomorrow.toDateString()) {
-        return 'Завтра'
+        return 'Tomorrow'
     } else {
-        return date.toLocaleDateString('uk-UA', {
+        return date.toLocaleDateString('en-US', {
             weekday: 'short',
             day: 'numeric',
             month: 'short',
@@ -545,15 +570,22 @@ function getWeatherEmoji(weatherMain) {
 }
 
 function getCityCoordinates() {
+    if (!city.value.trim()) {
+        error.value = 'Please enter a city name'
+        return
+    }
     axios
         .get(`http://api.openweathermap.org/geo/1.0/direct`, {
             params: {
-                q: props.city,
+                q: city.value,
                 appid: apiKey,
                 limit: 1,
             },
         })
         .then((res) => {
+            if (!res.data || !res.data.length) {
+                throw new Error('City not found')
+            }
             cityData.value = res.data[0]
             fetchWeather()
         })
@@ -578,7 +610,7 @@ function fetchWeather() {
                 lon: cityData.value.lon,
                 appid: apiKey,
                 units: 'metric',
-                lang: 'uk',
+                lang: 'en',
             },
         })
         .then((res) => {
@@ -601,7 +633,7 @@ function fetchForecast() {
                 lon: cityData.value.lon,
                 appid: apiKey,
                 units: 'metric',
-                lang: 'uk',
+                lang: 'en',
             },
         })
         .then((res) => {
@@ -612,5 +644,12 @@ function fetchForecast() {
         })
 }
 
-watch(() => props.city, getCityCoordinates, { immediate: true })
+function searchCity() {
+    error.value = null
+    weatherData.value = null
+    forecastData.value = null
+    selectedDay.value = null
+    showDetailModal.value = false
+    getCityCoordinates()
+}
 </script>

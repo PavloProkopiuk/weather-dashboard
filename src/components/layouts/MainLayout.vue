@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen w-full flex flex-col justify-between">
+    <div class="h-screen w-full flex flex-col justify-between bg-gray-50">
         <header class="bg-white shadow w-full">
             <div
                 class="flex justify-between items-center max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8"
@@ -20,7 +20,9 @@
         </main>
         <footer class="bg-white shadow text-center">
             <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-                <p class="text-gray-500">Pavlo Prokopiuk {{ new Date().getFullYear() }} (c) copyright</p>
+                <p class="text-gray-500">
+                    © {{ new Date().getFullYear() }} Pavlo Prokopiuk. All rights reserved.
+                </p>
             </div>
         </footer>
     </div>
