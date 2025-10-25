@@ -1,6 +1,11 @@
 # weather-dashboard
 
-This template should help get you started developing with Vue 3 in Vite.
+This web application allows users to access up-to-date weather information for any location using the OpenWeather API. Users can enter a city name to retrieve:
+
+- Current temperature
+- Humidity
+- Wind speed
+- 5-day weather forecast
 
 ## Recommended IDE Setup
 
